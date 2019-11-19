@@ -252,6 +252,9 @@ class TrainerSpec(ComponentSpec):
               type=standard_artifacts.TransformGraph, optional=True),
       'schema':
           ChannelParameter(type=standard_artifacts.Schema),
+      'study_best_hparams_path':
+          ChannelParameter(
+              type=standard_artifacts.HyperParameters, optional=True),
   }
   OUTPUTS = {
       'output': ChannelParameter(type=standard_artifacts.Model),
@@ -260,6 +263,7 @@ class TrainerSpec(ComponentSpec):
   # These compatibility aliases are provided for forwards compatibility.
   _INPUT_COMPATIBILITY_ALIASES = {
       'transform_graph': 'transform_output',
+      'best_hparams': 'study_best_hparams_path',
   }
   _OUTPUT_COMPATIBILITY_ALIASES = {
       'model': 'output',

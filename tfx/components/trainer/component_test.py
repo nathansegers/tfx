@@ -34,6 +34,8 @@ class ComponentTest(tf.test.TestCase):
     self.transform_output = channel_utils.as_channel(
         [standard_artifacts.TransformGraph()])
     self.schema = channel_utils.as_channel([standard_artifacts.Schema()])
+    self.best_hparams = channel_utils.as_channel(
+        [standard_artifacts.HyperParameters()])
     self.train_args = trainer_pb2.TrainArgs(num_steps=100)
     self.eval_args = trainer_pb2.EvalArgs(num_steps=50)
 
@@ -113,6 +115,19 @@ class ComponentTest(tf.test.TestCase):
           schema=self.schema,
           train_args=self.train_args,
           eval_args=self.eval_args)
+
+  def testConstructWithBestHParams(self):
+    trainer = component.Trainer(
+        trainer_fn='path.to.my_trainer_fn',
+        transformed_examples=self.examples,
+        transform_graph=self.transform_output,
+        schema=self.schema,
+        best_hparams=self.best_hparams,
+        train_args=self.train_args,
+        eval_args=self.eval_args)
+    self._verify_outputs(trainer)
+    self.assertEqual('StudyBestHParamsPath',
+                     trainer.inputs['best_hparams'].type_name)
 
 
 if __name__ == '__main__':

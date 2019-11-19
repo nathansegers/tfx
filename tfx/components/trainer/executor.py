@@ -168,6 +168,9 @@ class Executor(base_executor.BaseExecutor):
     ]
     schema_file = io_utils.get_only_uri_in_dir(
         artifact_utils.get_single_uri(input_dict['schema']))
+    best_hparams_file = io_utils.get_only_uri_in_dir(
+        artifact_utils.get_single_uri(input_dict['study_best_hparams_path'])
+    ) if input_dict.get('study_best_hparams_path') else None
 
     train_args = trainer_pb2.TrainArgs()
     eval_args = trainer_pb2.EvalArgs()
@@ -208,6 +211,8 @@ class Executor(base_executor.BaseExecutor):
         eval_files=eval_files,
         # A single uri for schema file.
         schema_file=schema_file,
+        # A single uri for best hparams (tuner's output) file.
+        best_hparams_file=best_hparams_file,
         # Number of train steps.
         train_steps=train_steps,
         # Number of eval steps.

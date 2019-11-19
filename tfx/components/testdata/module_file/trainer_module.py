@@ -24,10 +24,14 @@ examples/chicago_taxi/preprocess.py.
 from __future__ import division
 from __future__ import print_function
 
+import json
+import kerastuner
 import tensorflow as tf
 import tensorflow_model_analysis as tfma
 import tensorflow_transform as tft
 from tensorflow_transform.tf_metadata import schema_utils
+
+from tensorflow.python.lib.io import file_io  # pylint: disable=g-direct-tensorflow-import
 
 # Categorical features are assumed to each have a maximum value in the dataset.
 _MAX_CATEGORICAL_FEATURE_VALUES = [24, 31, 12]
@@ -236,10 +240,20 @@ def trainer_fn(hparams, schema):
       - eval_spec: Spec for eval.
       - eval_input_receiver_fn: Input function for eval.
   """
-  # Number of nodes in the first layer of the DNN
-  first_dnn_layer_size = 100
-  num_dnn_layers = 4
-  dnn_decay_factor = 0.7
+  # TODO(jyzhao): make it real once tuner is included.
+  if hparams.best_hparams_file:
+    best_hparams_config = json.loads(
+        file_io.read_file_to_string(hparams.best_hparams_file))
+    best_hparams = kerastuner.HyperParameters.from_config(best_hparams_config)
+
+    first_dnn_layer_size = best_hparams.get('first_dnn_layer_size')
+    num_dnn_layers = best_hparams.get('num_dnn_layers')
+    dnn_decay_factor = best_hparams.get('dnn_decay_factor')
+  else:
+    # Number of nodes in the first layer of the DNN
+    first_dnn_layer_size = 100
+    num_dnn_layers = 4
+    dnn_decay_factor = 0.7
 
   train_batch_size = 40
   eval_batch_size = 40

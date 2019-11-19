@@ -106,6 +106,7 @@ class Trainer(base_component.BaseComponent):
       transformed_examples: Optional[types.Channel] = None,
       transform_graph: Optional[types.Channel] = None,
       schema: types.Channel = None,
+      best_hparams: Optional[types.Channel] = None,
       module_file: Optional[Text] = None,
       trainer_fn: Optional[Text] = None,
       train_args: trainer_pb2.TrainArgs = None,
@@ -126,6 +127,8 @@ class Trainer(base_component.BaseComponent):
         the input transform graph if present.
       schema:  A Channel of 'SchemaPath' type, serving as the schema of training
         and eval data.
+      best_hparams: Optional 'StudyBestHParamsPath' channel for result of the
+        best hparams.
       module_file: A path to python module file containing UDF model definition.
         The module_file must implement a function named `trainer_fn` at its
         top level. The function must have the following signature.
@@ -186,6 +189,7 @@ class Trainer(base_component.BaseComponent):
         examples=examples,
         transform_output=transform_graph,
         schema=schema,
+        study_best_hparams_path=best_hparams,
         train_args=train_args,
         eval_args=eval_args,
         module_file=module_file,
