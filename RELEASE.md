@@ -90,6 +90,10 @@
 *   Added Kubeflow artifact visualization of inputs, outputs and
     execution properties for components using a Markdown file. Added Tensorboard
     to Trainer components as well.
+*   Updated Kubeflow orchestrator to use gRPC based MLMD server instead of
+    directly talking to MLMD database using the swig client. This includes the
+    change to KubeflowMetadataConfig proto message used in the kubeflow
+    orchestration container arguments.
 
 ## Bug fixes and other changes
 
