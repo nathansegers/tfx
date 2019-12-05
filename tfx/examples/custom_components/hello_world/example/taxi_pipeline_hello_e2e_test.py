@@ -23,7 +23,7 @@ from typing import Text
 
 import tensorflow as tf
 
-from tfx.examples.custom_components_hello_world import taxi_pipeline_hello
+from tfx.examples.custom_components.hello_world import taxi_pipeline_hello
 from tfx.orchestration import metadata
 from tfx.orchestration.beam.beam_dag_runner import BeamDagRunner
 
